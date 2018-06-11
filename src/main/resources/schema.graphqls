@@ -1,0 +1,120 @@
+#########################################################
+#                    type definition
+#########################################################
+type User {
+    uid: String!
+    name: String!
+    tags: [String]!
+    email: String
+    address: String
+    phoneNumber: String!
+}
+
+type Activity {
+    aid: ID!
+    name: String!
+    address: String
+    startTime: String
+    endTime: String
+    now: Int
+    max: Int
+    min: Int
+    summary: String
+    tag: String!
+    signUpTime: String
+    state: ActivityState
+}
+
+type Applicaton {
+    uid: ID
+    tag: String
+    applyTime: String
+    state: ApplicatonState
+}
+
+type ActivityRecord{
+    uid: String!
+    aid: String!
+    tag: String!
+    signInTime: String!
+    signUpTime: String
+}
+
+type LoginResponse {
+    token: String
+    errorMessage: String
+    user: User
+    joinedActivites: [Activity]
+}
+
+enum ActivityState {
+    REGISTERING
+    AFTER_REG
+    HOLDING
+    FINISHED
+}
+
+enum ApplicatonState{
+    PENDDING
+    PASS
+    DEN
+
+}
+
+#########################################################
+#                    input
+#########################################################
+input SignData {
+    phoneNumber: String
+    password: String
+}
+
+input UserInfo {
+    uid: String!
+    email: String
+    address: String
+}
+
+input ApplicationInfo{
+    uid: ID!
+    tag: String!
+    applyTime: String!
+    state: String!
+}
+
+input ActivityInfo{
+    uid: ID
+    aid: ID!
+    activity: Activity!
+}
+
+#########################################################
+#                    entrance
+#########################################################
+type Query {
+    getUsers: [User]
+
+    unjoinedActivity(): [Activity]
+    joinedActivity(uid: ID!): [Activity]
+
+    getApplications(uid: ID!): [Application]
+}
+
+type Mutation{
+    signIn(data: SignData!): LoginResponse
+    signUp(data: SignData!): LoginResponse
+    signOut: null
+
+    createActivity(data: ActivityInfo): Activity
+    deleteActivity(data: ActivityInfo): Activity
+    updateActivity(data: ActivityInfo): Activity
+
+    updateUserInfo(user: UserInfo!): User
+    createActivityUser(data: ActivityInfo): Activity
+    deleteActivityUser(data: ActivityInfo): Activity
+    updateActivityUser(data: ActivityInfo): Activity
+
+    createApp(data: ApplicationInfo!): Application
+    deleteApp(data: ApplicationInfo!): Application
+    updateApp(data: ApplicationInfo!): Application
+}
